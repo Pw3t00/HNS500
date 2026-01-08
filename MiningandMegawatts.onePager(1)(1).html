@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2026 by Pw3t00 (http://jsbin.com/zekimax/2/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartEnergy:  Powering Central African Republic (CAR) </title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom Font Application */
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Merriweather', serif; }
+
+        /* Chart Container Utilities */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max width constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Smooth Scroll */
+        html { scroll-behavior: smooth; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f5f5f4; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+    </style>
+
+    <!-- Chosen Palette: Warm Professional Neutral -->
+    <!-- Background: Stone-50 (#fafaf9) for a calm, organic feel. -->
+    <!-- Text: Stone-800 (#292524) for high readability. -->
+    <!-- Primary Brand: Slate-800 (#1e293b) for authority. -->
+    <!-- Accents: Amber-600 (#d97706) for energy/opportunity, Emerald-700 (#047857) for financial growth/sustainability. -->
+
+    <!-- Application Structure Plan:
+         1. Hero Section: Hook and immediate "Why Invest" summary to capture attention.
+         2. The Context (Problem): Data visualization of the energy deficit and cost arbitrage to establish the market need.
+         3. The Solution (HNS500): Interactive breakdown of the technology stack and capacity impact. Visualizing the "5x" growth.
+         4. Financial Engine: Interactive Revenue Estimator tool allowing investors to toggle utilization rates and see projected returns, plus PPA details.
+         5. Risk Fortress: Tabbed interface to explore the complex MDB guarantee structure (MIGA, IDA, AfDB) without overwhelming text.
+         6. Capital Structure: Doughnut chart and breakdown of the $1.1B stack showing the leverage effect of the equity ask.
+         7. Footer/CTA: Contact info.
+         
+         Rationale: This linear but interactive flow moves from "Why" -> "What" -> "How Much" -> "Safety", mirroring an investor's diligence process.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Cost Comparison (Bar Chart): Shows Diesel ($0.45) vs Target ($0.15). Goal: Highlight arbitrage. Interaction: Tooltip details.
+         2. Capacity Impact (Bar/Line Combo): Visualizing the 100MW -> 500MW jump. Goal: Show scale.
+         3. Tech Stack (Grid of Cards): Icons (Unicode) for Solar, Gas, Biomass, Battery. Goal: Explain hybrid nature.
+         4. Revenue Projection (Line Chart): 5-Year ramp up. Goal: Show growth.
+         5. Revenue Calculator (JS Input): Slider for Capacity Factor -> Updates HTML text. Goal: Engage user with "what-if" scenarios.
+         6. Risk Tabs (HTML/JS Tabs): Organizes text-heavy guarantee info. Goal: Clarity.
+         7. Capital Stack (Doughnut Chart): Equity vs Debt split. Goal: Show leverage.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-stone-800 leading-relaxed antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-stone-50/95 backdrop-blur-sm border-b border-stone-200 shadow-sm transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-slate-900 tracking-tight font-serif">SmartEnergy<span class="text-amber-600">.</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-stone-600 hover:text-amber-600 font-medium transition-colors">Overview</a>
+                    <a href="#solution" class="text-stone-600 hover:text-amber-600 font-medium transition-colors">Solution</a>
+                    <a href="#financials" class="text-stone-600 hover:text-amber-600 font-medium transition-colors">Financials</a>
+                    <a href="#risk" class="text-stone-600 hover:text-amber-600 font-medium transition-colors">Risk</a>
+                    <a href="#capital" class="text-stone-600 hover:text-amber-600 font-medium transition-colors">Capital</a>
+                </div>
+                <button onclick="document.getElementById('footer').scrollIntoView()" class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg">
+                    Join Us
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="overview" class="relative pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-4xl mx-auto">
+            <div class="inline-block mb-6 px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 font-semibold text-sm tracking-wide uppercase">
+                Memorandum &bull; Confidential
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold text-slate-900 mb-8 leading-tight">
+                Mining and Megawatts: <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-amber-700">Powering the Central African Republic</span> from the Inside Out.
+            </h1>
+            <p class="text-xl text-stone-600 mb-10 max-w-2xl mx-auto">
+                A <strong>$250 Million</strong> USD equity raise, collateralized by mineral rights, unlocking a <strong>$2.1 Billion USD</strong> capital stack to build the Central African Republic's National Energy Backbone.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left mt-16">
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-stone-100 hover:border-amber-200 transition-colors">
+                    <div class="text-4xl mb-3">🚀</div>
+                    <h3 class="font-bold text-slate-900 text-lg mb-2">Exponential Scale</h3>
+                    <p class="text-stone-600 text-sm">Increases national generation capacity by <strong>&gt;500%</strong> with <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-amber-700"><strong>HNS500 Hybrid Platform</strong></span>.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-stone-100 hover:border-emerald-200 transition-colors">
+                    <div class="text-4xl mb-3">🛡️</div>
+                    <h3 class="font-bold text-slate-900 text-lg mb-2">MDB Fortress</h3>
+                    <p class="text-stone-600 text-sm">De-risked returns secured by <strong>MIGA, IDA, and AfDB</strong> guarantees.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-stone-100 hover:border-blue-200 transition-colors">
+                    <div class="text-4xl mb-3">💵</div>
+                    <h3 class="font-bold text-slate-900 text-lg mb-2">USD Returns</h3>
+                    <p class="text-stone-600 text-sm"><strong>25-30 Year</strong> USD-indexed PPAs yielding projected 25%+ Equity IRR.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- The Energy Paradox (Context) -->
+    <section class="py-20 bg-white border-y border-stone-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">The Energy Paradox</h2>
+                    <p class="text-lg text-stone-600 mb-6">
+                        CAR holds immense geological wealth (Gold, Iron, Copper, Cobalt, Diamonds, Uranium) but remains stifled by a <strong>16% electrification rate</strong>.
+                    </p>
+                    <p class="text-stone-600 mb-6 leading-relaxed">
+                        Industry relies on fragmented, expensive diesel generation. This creates a massive arbitrage opportunity. SmartEnergy Holdings replaces inefficient diesel with a centralized, reliable large <strong>Hybrid utility-scale power plant</strong>, cutting costs by ~60% while capturing healthy margins.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <span class="text-red-500 mr-3 text-xl">⚠️</span>
+                            <span class="text-stone-700"><strong>Pain Point:</strong> Diesel costs $0.35 - $0.60 per kWh.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-emerald-600 mr-3 text-xl">✅</span>
+                            <span class="text-stone-700"><strong>Solution:</strong> HNS500 Target Tariff ~$0.15 per kWh.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-stone-50 p-8 rounded-2xl border border-stone-200">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 text-center">Cost of Power Arbitrage ($/kWh)</h3>
+                    <div class="chart-container">
+                        <canvas id="costChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-stone-500 mt-4">Source: Regional Market Analysis & SmartEnergy Financial Model</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Solution (HNS500) -->
+    <section id="solution" class="py-20 bg-stone-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">HNS500 Platform</h2>
+                <p class="text-lg text-stone-600">
+                    A modular, tri-fuel ecosystem designed for resilience. Combining low-cost renewables with agile baseload power to multiply national capacity.
+                </p>
+            </div>
+
+            <!-- Tech Stack Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                <!-- Solar -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-amber-500 hover:shadow-md transition-shadow">
+                    <div class="text-4xl mb-4 text-amber-500">☀️</div>
+                    <h4 class="font-bold text-slate-900 mb-2">200 MW Solar PV</h4>
+                    <p class="text-sm text-stone-600">Lowest marginal cost generation. Utility-scale bifacial arrays.</p>
+                </div>
+                <!-- Gas -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-slate-600 hover:shadow-md transition-shadow">
+                    <div class="text-4xl mb-4 text-slate-600">🔥</div>
+                    <h4 class="font-bold text-slate-900 mb-2">300 MW Modular NGCC|IGCC</h4>
+                    <p class="text-sm text-stone-600">Modular gas engines. Agile baseload using local agricultural waste. Local fuel hedge. via Virtual Pipeline.</p>
+                </div>
+                <!-- Biomass -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-emerald-600 hover:shadow-md transition-shadow">
+                    <div class="text-4xl mb-4 text-emerald-600">🌿</div>
+                    <h4 class="font-bold text-slate-900 mb-2">Transmission-as-a-Service (TaaS)</h4>
+                    <p class="text-sm text-stone-600">Build UHV Transmission lines (physical grid). Ancillary Services Monetization:
+
+    Voltage support, frequency regulation, black start services,
+
+    Reactive power compensation charges ($/MVAR-hour),
+
+    System inertia services ($/MW-second)</p>
+
+
+                </div>
+                <!-- Battery -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-indigo-600 hover:shadow-md transition-shadow">
+                    <div class="text-4xl mb-4 text-indigo-600">🔋</div>
+                    <h4 class="font-bold text-slate-900 mb-2">500 MWh BESS</h4>
+                    <p class="text-sm text-stone-600">Lithium-ion storage for time-shifting and grid stability.</p>
+                </div>
+            </div>
+
+            <!-- Capacity Chart -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+                    <div class="col-span-1 lg:col-span-1">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">5x Capacity Increase</h3>
+                        <p class="text-stone-600 mb-4">
+                            Moving CAR from a fragile ~100MW base to over <strong>500MW</strong> of reliable power.
+                        </p>
+                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-100">
+                            <span class="block text-3xl font-bold text-amber-600 mb-1">2.1 Mt</span>
+                            <span class="text-sm text-amber-900 font-medium">CO₂ Avoided Annually</span>
+                        </div>
+                    </div>
+                    <div class="col-span-1 lg:col-span-2">
+                         <div class="chart-container">
+                            <canvas id="capacityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financials (Interactive) -->
+    <section id="financials" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Bankable Financials</h2>
+                <p class="text-slate-300 max-w-3xl text-lg">
+                    Secured by 25-30 year <strong>USD-Indexed PPAs</strong>. The revenue model leverages a two-part tariff (Capacity + Energy) to ensure debt service coverage.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Interactive Estimator -->
+                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700">
+                    <h3 class="text-xl font-bold text-amber-500 mb-6 flex items-center">
+                        <span class="mr-2">🧮</span> Revenue Estimator
+                    </h3>
+                    <p class="text-slate-400 mb-8 text-sm">
+                        Adjust the <strong>Capacity Factor</strong> to see estimated annual revenue based on a blended tariff of $0.15/kWh.
+                    </p>
+                    
+                    <div class="mb-8">
+                        <div class="flex justify-between mb-2">
+                            <label for="utilization" class="font-medium text-slate-300">Utilization Rate (Capacity Factor)</label>
+                            <span id="utilizationDisplay" class="font-bold text-white">60%</span>
+                        </div>
+                        <input type="range" id="utilization" min="40" max="90" value="60" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                        <div class="flex justify-between text-xs text-slate-500 mt-2">
+                            <span>40% (Conservative)</span>
+                            <span>90% (Max Baseload)</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 p-6 rounded-xl border border-slate-700 text-center">
+                        <p class="text-sm text-slate-400 mb-1">Estimated Annual Revenue</p>
+                        <p class="text-4xl font-bold text-white tracking-tight" id="revenueOutput">$262.8 M</p>
+                        <p class="text-xs text-slate-500 mt-2 italic">*Based on 500MW capacity @ $0.15/kWh blended</p>
+                    </div>
+                </div>
+
+                <!-- Revenue Chart -->
+                <div class="bg-white p-6 rounded-2xl text-slate-900">
+                    <h3 class="text-lg font-bold mb-4 text-center">Projected Revenue Growth (Year 1-5)</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Risk Mitigation (Tabs) -->
+    <section id="risk" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">The World Bank Group Guaranteed Fortress</h2>
+                <p class="text-lg text-stone-600 max-w-3xl mx-auto">
+                    A comprehensive security package provided by the WBG and other leading Multilateral Development Banks sharply reduces political and credit risks.
+                </p>
+            </div>
+
+            <!-- Custom Tabs -->
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-wrap justify-center gap-2 mb-8" role="tablist">
+                    <button class="tab-btn px-6 py-3 rounded-full font-semibold text-sm bg-slate-900 text-white shadow-lg ring-2 ring-slate-900 ring-offset-2 transition-all" data-target="miga">
+                        MIGA Political Risk
+                    </button>
+                    <button class="tab-btn px-6 py-3 rounded-full font-semibold text-sm bg-white text-stone-600 hover:bg-stone-100 border border-stone-200 transition-all" data-target="ida">
+                        IDA Guarantee
+                    </button>
+                    <button class="tab-btn px-6 py-3 rounded-full font-semibold text-sm bg-white text-stone-600 hover:bg-stone-100 border border-stone-200 transition-all" data-target="afdb">
+                        AfDB Support
+                    </button>
+                </div>
+
+                <!-- Tab Content: MIGA -->
+                <div id="miga" class="tab-content p-8 bg-stone-50 rounded-2xl border border-stone-200 shadow-sm animate-fade-in">
+                    <div class="flex items-start">
+                        <div class="text-4xl mr-6 mt-1">🌍</div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">MIGA Political Risk Insurance</h3>
+                            <p class="text-stone-600 mb-4">Provided by the World Bank Group, MIGA insurance protects equity against non-commercial risks.</p>
+                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-stone-700">
+                                <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> Expropriation Protection</li>
+                                <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> War & Civil Disturbance</li>
+                                <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> Transfer Restriction (Currency)</li>
+                                <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> Breach of Contract</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: IDA -->
+                <div id="ida" class="tab-content hidden p-8 bg-stone-50 rounded-2xl border border-stone-200 shadow-sm animate-fade-in">
+                    <div class="flex items-start">
+                        <div class="text-4xl mr-6 mt-1">🏦</div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">IDA Partial Risk Guarantee (PRG)</h3>
+                            <p class="text-stone-600 mb-4">Backstops the government's PPA payment obligations.</p>
+                            <ul class="space-y-2 text-sm text-stone-700">
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">✓</span> <strong>Payment Security:</strong> If the offtaker fails to pay, IDA pays the commercial lenders.</li>
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">✓</span> <strong>Deterrence:</strong> Default to IDA triggers a cross-default on all World Bank aid, prioritizing SmartEnergy payments.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: AfDB -->
+                <div id="afdb" class="tab-content hidden p-8 bg-stone-50 rounded-2xl border border-stone-200 shadow-sm animate-fade-in">
+                    <div class="flex items-start">
+                        <div class="text-4xl mr-6 mt-1">🤝</div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">AfDB Partial Credit Guarantee</h3>
+                            <p class="text-stone-600 mb-4">African Development Bank support enhances the credit profile of debt tranches.</p>
+                            <ul class="space-y-2 text-sm text-stone-700">
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">✓</span> Extends commercial loan tenors.</li>
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">✓</span> Provides liquidity facilities to ensure consistent cash flow.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dual Hedge Strategy -->
+             <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="bg-white p-6 rounded-xl border-l-4 border-amber-500 shadow-sm">
+                    <h4 class="font-bold text-slate-900 mb-2">Hedge 1: Operational</h4>
+                    <p class="text-sm text-stone-600">Hybrid design reduces reliance on any single fuel. Solar (low cost) + Coal + Gas/Biomass (firm backup) ensures reliability despite volatility.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-l-4 border-emerald-500 shadow-sm">
+                    <h4 class="font-bold text-slate-900 mb-2">Hedge 2: Commercial</h4>
+                    <p class="text-sm text-stone-600">A diversified revenue model combining hard‑currency PPAs with Mining Majors and country‑backed resources supported by international guarantees—boosting credit strength, reducing sovereign risk, and enhancing bankability.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capital Structure -->
+    <section id="capital" class="py-20 bg-stone-50 border-t border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Capital & Deal Structure</h2>
+                    <p class="text-lg text-stone-600 mb-6">
+                        SmartEnergy is seeking equity partners to catalyze a highly leveraged, de-risked capital stack.
+                    </p>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 mb-6">
+                        <div class="flex items-center justify-between mb-4 border-b border-stone-100 pb-4">
+                            <span class="text-stone-600 font-medium">Equity Raise</span>
+                            <span class="text-2xl font-bold text-amber-600">$250 Million</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-stone-600 font-medium">Total Capital Unlocked</span>
+                            <span class="text-2xl font-bold text-slate-900">$2.1 Billion</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-stone-500">
+                        The equity acts as the "anchor" to unlock concessional, non-recourse debt from MDBs, enhancing equity IRR to an estimated <strong>22% - 26%</strong>.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 text-center">Capital Stack Breakdown</h3>
+                    <div class="chart-container">
+                        <canvas id="capitalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-slate-900 text-stone-300 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-serif font-bold text-white mb-6">Join the Transformation</h2>
+            <p class="mb-8 max-w-2xl mx-auto">
+                HNS500 is the landmark infrastructure platform through which the Central African Republic’s next phase of economic growth will be built.
+            <div class="inline-flex flex-col md:flex-row gap-8 items-center justify-center mb-12">
+                <div class="text-left">
+                    <p class="text-xs uppercase tracking-widest text-slate-500 mb-1">Headquarters</p>
+                    <p class="text-white font-medium"> 21 Custom St, Suite 500 <br>Boston, MA 02110</p>
+                </div>
+                <div class="h-10 w-px bg-slate-700 hidden md:block"></div>
+                <div class="text-left">
+                    <p class="text-xs uppercase tracking-widest text-slate-500 mb-1">Online</p>
+                    <a href="#" class="text-amber-500 hover:text-amber-400 font-medium transition-colors">smartenergy@solarsmartnow.io</a>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-sm text-slate-600">
+                &copy; 2026 SmartEnergy Holdings | All Rights Reserved | Confidential Investment Memorandum.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Navigation Logic ---
+        // Add scroll shadow
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                nav.classList.add('shadow-md');
+            } else {
+                nav.classList.remove('shadow-md');
+            }
+        });
+
+        // --- Chart Configurations (Chart.js) ---
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        Chart.defaults.color = '#57534e'; // stone-600
+
+        // 1. Cost Comparison Chart
+        const ctxCost = document.getElementById('costChart').getContext('2d');
+        new Chart(ctxCost, {
+            type: 'bar',
+            data: {
+                labels: ['Diesel (Avg)', 'SmartEnergy Target'],
+                datasets: [{
+                    label: 'Cost per kWh ($)',
+                    data: [0.45, 0.15],
+                    backgroundColor: [
+                        '#ef4444', // Red for high cost
+                        '#059669'  // Emerald for target
+                    ],
+                    borderRadius: 6,
+                    barPercentage: 0.6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '$' + context.raw + ' / kWh';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e7e5e4' }, // stone-200
+                        ticks: { callback: function(value) { return '$' + value; } }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 2. Capacity Impact Chart
+        const ctxCapacity = document.getElementById('capacityChart').getContext('2d');
+        new Chart(ctxCapacity, {
+            type: 'bar',
+            data: {
+                labels: ['Current Capacity', 'HNS500 Added'],
+                datasets: [{
+                    label: 'Capacity (MW)',
+                    data: [100, 500],
+                    backgroundColor: [
+                        '#94a3b8', // Slate-400
+                        '#d97706'  // Amber-600
+                    ],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'National Generation Capacity (MW)' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e7e5e4' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 3. Revenue Estimator Logic
+        const slider = document.getElementById('utilization');
+        const display = document.getElementById('utilizationDisplay');
+        const output = document.getElementById('revenueOutput');
+        
+        // Formula: 500MW * 1000 kW/MW * 8760 hours * Utilization% * $0.15
+        function updateRevenue() {
+            const utilization = slider.value / 100;
+            const mw = 500;
+            const hours = 8760;
+            const rate = 0.15;
+            
+            // Calculate annual generation in kWh
+            const generation = mw * 1000 * hours * utilization;
+            // Calculate Revenue
+            const revenue = generation * rate;
+            
+            // Format to Millions
+            const revenueMillions = (revenue / 1000000).toFixed(1);
+            
+            display.textContent = slider.value + '%';
+            output.textContent = '$' + revenueMillions + ' M';
+        }
+
+        slider.addEventListener('input', updateRevenue);
+        // Init
+        updateRevenue();
+
+        // 4. Revenue Growth Chart
+        const ctxRev = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctxRev, {
+            type: 'line',
+            data: {
+                labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                datasets: [{
+                    label: 'Projected Revenue ($M)',
+                    data: [180, 210, 245, 280, 300],
+                    borderColor: '#059669', // Emerald-600
+                    backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#059669',
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) { return '$' + context.raw + ' M'; }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: { color: '#e7e5e4' },
+                        suggestedMin: 100
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 5. Capital Stack Chart
+        const ctxCapital = document.getElementById('capitalChart').getContext('2d');
+        new Chart(ctxCapital, {
+            type: 'doughnut',
+            data: {
+                labels: ['Equity Ask ($250M)', 'Concessional Debt ($2.1B - MDBs)'],
+                datasets: [{
+                    data: [250, 2100],
+                    backgroundColor: [
+                        '#d97706', // Amber (Equity)
+                        '#1e293b'  // Slate (Debt)
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 20 } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.chart._metasets[context.datasetIndex].total;
+                                const percentage = ((context.raw / total) * 100).toFixed(1) + '%';
+                                return context.label + ': ' + percentage;
+                            }
+                        }
+                    }
+                },
+                cutout: '65%'
+            }
+        });
+
+        // --- Tabs Logic ---
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.dataset.target;
+
+                // Reset styles
+                tabBtns.forEach(b => {
+                    b.classList.remove('bg-slate-900', 'text-white', 'shadow-lg', 'ring-2', 'ring-slate-900');
+                    b.classList.add('bg-white', 'text-stone-600', 'border', 'border-stone-200');
+                });
+                tabContents.forEach(c => c.classList.add('hidden'));
+
+                // Active style
+                btn.classList.remove('bg-white', 'text-stone-600', 'border', 'border-stone-200');
+                btn.classList.add('bg-slate-900', 'text-white', 'shadow-lg', 'ring-2', 'ring-slate-900');
+                
+                // Show content
+                document.getElementById(target).classList.remove('hidden');
+            });
+        });
+
+    </script>
+</body>
+</html>
